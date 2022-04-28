@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: mywas
-        image: docker pull dawun4705/flask:latest
+        image: dawun4705/flask:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000 
