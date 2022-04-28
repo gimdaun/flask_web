@@ -51,6 +51,7 @@ jobs:
         kubectl get pod
         kubectl get svc
         aws ec2 describe-subnets --subnet-ids
+        eksctl -v
         
     - name: eksctl-cmd
       uses: robatwave/github-action-eksctl@0.1.2
