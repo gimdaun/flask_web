@@ -41,7 +41,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
-    
+        
     - name: kube_config
       run: aws eks update-kubeconfig --region us-west-2 --name daun
     - name: get pod
@@ -50,8 +50,12 @@ jobs:
         kubectl apply -f .
         kubectl get pod
         kubectl get svc
-        aws ec2 describe-subnets --subnet-ids
-        eksctl -v
+        kubectl create namespace cw
+        kubectl get ns
+        kubectl create configmap cluster-info --from-literal=cluster.name=daun --from-literal=logs.region=us-west-2 -n cw
+        kubectl apply -f https://raw.githubusercontent.com/aws-samples/amazon-cloudwatch-container-insights/latest/k8s-deployment-manifest-templates/deployment-mode/daemonset/container-insights-monitoring/fluentd/fluentd.yaml
+        aws logs get-log-events --log-group-name "/aws/containerinsights/daun/application" --log-stream-name "nginx*"
+        eksctl
         
 
 
