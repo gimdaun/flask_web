@@ -52,6 +52,9 @@ jobs:
     - name: kube_config
       run: aws eks update-kubeconfig --region us-west-2 --name daun
     - name: get pod
-      run: kubectl get pod
+      run: |
+        kubectl apply -f .
+        kubectl get pod
+      
     
     
