@@ -50,6 +50,14 @@ jobs:
         kubectl apply -f .
         kubectl get pod
         kubectl get svc
-      
+        aws ec2 describe-subnets --subnet-ids
+        
+    - name: ingress
+      run: |
+        eksctl utils associate-iam-oidc-provider --region us-west-2 --cluster daun --approve
+        curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.0/docs/install/iam_policy.json
+        aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+        eksctl create iamserviceaccount --cluster=daun --namespace=kube-system --name=aws-load-balancer-controller --attach-policy-arn=arn:aws:iam::940168446867:policy/AWSLoadBalancerControllerIAMPolicy --override-existing-serviceaccounts --approve
+        kubectl get sa -n kube-system
     
     
