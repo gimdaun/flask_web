@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: was
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mywas
+  template:
+    metadata:
+      labels:
+        app: mywas
+    spec:
+      containers:
+      - name: mywas
+        image: sook22002/cmong:flask_v1 #dawun4705/django:was
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000 #8000
+      initContainers:
+      - name: mysql-svc
+        image: busybox:1.28
+        command: ['sh', '-c', "until nslookup db-0.mysql-svc.default.svc.cluster.local; do echo waiting for db-0.mysql-svc; sleep 2; done"]
+      # - name: redis-svc
+      #   image: busybox:1.28
+      #   command: ['sh', '-c', "until nslookup redis-svc.default.svc.cluster.local; do echo waiting for redis-svc; sleep 2; done"]
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: was-svc
+spec:
+  selector:
+    app: mywas
+  #sessionAffinity: ClientIP
+  ports:
+  - port: 5000 #8000
+    targetPort: 5000 #8000
+  #type: LoadBalancer

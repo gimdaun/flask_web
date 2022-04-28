@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-svc
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306
+    name: mysql
+  clusterIP: None
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+spec:
+  serviceName: "mysql-svc"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: db
+        image: siluniv/codemong:mysql_sample_v1 #한글설정파일 포함
+        args:
+          - "--ignore-db-dir=lost+found"
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: rootpass
+                name: mysql-env
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: dbpass
+                name: mysql-env
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: user
+                name: mysql-env
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: pw
+                name: mysql-env
+          - name: MYSQL_ROOT_HOST #접근 호스트
+            value: '%'   
+        ports:
+        - containerPort: 3306
+          name: db
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/mysql
+        - name: mysql-conf
+          mountPath:  /etc/mysql/conf.d
+      volumes:
+        - name: mysql-conf
+          configMap:
+            name: db-conf #configmap name 
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+
+          
+

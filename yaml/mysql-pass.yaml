@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  rootpass: dGVzdA== #test #ZnJvZG8= 
+  dbpass: dGVzdF9kYg== #test_db #ZGphbmdvX2Ri 
+  user: dGVzdA== #cHl0aG9u #python
+  pw: dGVzdA== #cHl0aG9u 
+kind: Secret
+metadata:
+  name: mysql-env
