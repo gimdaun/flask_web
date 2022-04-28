@@ -19,6 +19,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flask pymysql
+        
+    - name: Set up Docker Buildx 
+      uses: docker/setup-buildx-action@v1 
+      
+    - name: docker ps
+      run: docker ps
     
     
     
