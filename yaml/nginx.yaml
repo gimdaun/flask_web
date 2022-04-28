@@ -14,11 +14,11 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: dawun4705/m-dev:nginx_v1 #nginx:1.21.1 #nginx:1.21.1 #hifrodo/msa-devops:nginx_v1
+        image: nginx
         ports:
         - containerPort: 80
         volumeMounts:
-        - mountPath: "/etc/nginx/" #사이트 접속시 css가 깨져보일 수 있으므로
+        - mountPath: "/etc/nginx/" 
           name: nginx-conf
           readOnly: true
       volumes:
