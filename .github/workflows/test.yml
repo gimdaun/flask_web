@@ -28,8 +28,8 @@ jobs:
       run: ls
     - name: docker build
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask:latest ./Dockerfile
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask:v1_$GITHUB_RUN_NUMBER ./Dockerfile
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask:latest .
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/flask:v1_$GITHUB_RUN_NUMBER .
         docker images
         
     - name: Login to DockerHub
