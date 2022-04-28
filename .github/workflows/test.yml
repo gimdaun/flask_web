@@ -50,7 +50,6 @@ jobs:
         kubectl apply -f .
         kubectl get pod
         kubectl get svc
-        kubectl create namespace amazon-cloudwatch
         kubectl get ns
         kubectl delete configmap cluster-info -n amazon-cloudwatch
         kubectl create configmap cluster-info --from-literal=cluster.name=daun --from-literal=logs.region=us-west-2 -n cw
